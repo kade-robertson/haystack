@@ -1,0 +1,3 @@
+"Hello, World!"o|
+
+Haystack supports strings too!

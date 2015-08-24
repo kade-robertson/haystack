@@ -41,19 +41,21 @@ def process(program):
     stack = []
     dx,dy = 1,0
     x,y   = 0,0
+    strlt = ""
+    isstr = False
     while matrix[y][x] != '|':
         char = matrix[y][x]
-        if char in '<>^v':
+        if char in '<>^v' and not isstr:
             tx,ty = x,y
             x,y = movement(char,x,y)
             dx,dy = x-tx,y-ty
-        elif char in funcs:
+        elif char in funcs and not isstr:
             stack = funcs[char](stack)
             x,y = x+dx,y+dy
         elif char in '0123456789':
             stack += [int(char)]
             x,y = x+dx,y+dy
-        elif char == '?':
+        elif char == '?' and not isstr:
             cond = stack.pop()
             if dx != 0 and dy == 0:
                 if cond:
@@ -65,6 +67,17 @@ def process(program):
                     dx,dy = 1,0
                 else:
                     dx,dy = -1,0
+            x,y = x+dx,y+dy
+        elif char == '"':
+            if isstr:
+                stack += [strlt]
+                strlt = ""
+                isstr = False
+            else:
+                isstr = True
+            x,y = x+dx,y+dy
+        elif isstr:
+            strlt += char
             x,y = x+dx,y+dy
         else:
             x,y = x+dx,y+dy

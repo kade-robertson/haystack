@@ -1,0 +1,4 @@
+1o>1+v  This will infintely loop, and
+ |^<o<  print every number! If you want
+        yout program to end, you must
+direct the flow to a needle (|).
