@@ -1,0 +1,5 @@
+i001>d@+@1+d@;d@=v
+    ^<<<<<;<<<<<<?>o|
+
+This takes user input n, and prints
+the nth Fibonacci number.
