@@ -1,8 +1,8 @@
 import sys
 
-def plus_(s):  return s + [s.pop() + s.pop()]
+def plus_(s):  return s + [s.pop(-2) + s.pop()]
 def minus_(s): return s + [s.pop(-2) - s.pop()]
-def mult_(s):  return s + [s.pop() * s.pop()]
+def mult_(s):  return s + [s.pop(-2) * s.pop()]
 def divd_(s):  return s + [float(s.pop(-2)) / float(s.pop())]
 def input_(s): return s + [input()]
 def dupl_(s):  return s + [s[-1]]
@@ -33,7 +33,7 @@ def movement(char,x,y):
 
 def process(program):
     lines  = program.split('\n')
-    matrix = [[char for char in line] for line in lines]
+    matrix = [[[' '],[char for char in line]][line != ''] for line in lines]
     funcs = { '+': plus_,  '-': minus_, '*': mult_,  '/': divd_,
               'i': input_, 'o': outn_,  'c': outc_,  'd': dupl_,
               '@': rott_,  '[': lthan_, ']': gthan_, '=': eqto_,
@@ -49,6 +49,12 @@ def process(program):
             tx,ty = x,y
             x,y = movement(char,x,y)
             dx,dy = x-tx,y-ty
+        elif char == '/':
+            dx,dy = [dy == -1,-1][dy == 1],[dx == -1,-1][dx == 1]
+            x,y = x+dx,y+dy
+        elif char == '\\':
+            dx,dy = [dy == 1,-1][dy == -1],[dx == 1,-1][dx == -1]
+            x,y = x+dx,y+dy
         elif char in funcs and not isstr:
             stack = funcs[char](stack)
             x,y = x+dx,y+dy
