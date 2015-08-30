@@ -31,9 +31,15 @@ def movement(char,x,y):
     elif char == '^': return x,y-1
     elif char == 'v': return x,y+1
 
+def pad(matrix):
+    bigrow = max(len(x) for x in matrix)
+    newmat = [x+[' ']*(bigrow - len(x)) for x in matrix]
+    return newmat
+
 def process(program):
     lines  = program.split('\n')
     matrix = [[[' '],[char for char in line]][line != ''] for line in lines]
+    matrix = pad(matrix)
     funcs = { '+': plus_,  '-': minus_, '*': mult_,  '/': divd_,
               'i': input_, 'o': outn_,  'c': outc_,  'd': dupl_,
               '@': rott_,  '[': lthan_, ']': gthan_, '=': eqto_,
