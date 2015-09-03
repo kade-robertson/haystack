@@ -56,10 +56,10 @@ def process(program):
             x,y = movement(char,x,y)
             dx,dy = x-tx,y-ty
         elif char == '/':
-            dx,dy = [dy == -1,-1][dy == 1],[dx == -1,-1][dx == 1]
+            dx,dy = dy,dx
             x,y = x+dx,y+dy
         elif char == '\\':
-            dx,dy = [dy == 1,-1][dy == -1],[dx == 1,-1][dx == -1]
+            dx,dy = -dy,-dx
             x,y = x+dx,y+dy
         elif char in funcs and not isstr:
             stack = funcs[char](stack)
