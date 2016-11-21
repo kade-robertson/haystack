@@ -20,11 +20,17 @@ def swap_(s):
 def disc_(s):
     s.pop()
     return s
-def outn_(s):
-    print(s[-1])
+def out_(s):
+    print(s[-1],end='')
+    return s
+def outnl_(s):
+    print(s[-1],end='\n')
     return s
 def outc_(s):
-    print(chr(s[-1]))
+    print(chr(s[-1]),end='')
+    return s
+def outcnl_(s):
+    print(chr(s[-1]),end='\n')
     return s
 
 def expand_map(m):
@@ -38,9 +44,10 @@ def interpret(prog, debug, vdebug):
     maxr, maxc, prog = expand_map(prog)
     stack = []
     funcs = { '+': plus_,  '-': minus_, '*': mult_,  'D': divd_,
-              'i': input_, 'o': outn_,  'c': outc_,  'd': dupl_,
-              '@': rott_,  '[': lthan_, ']': gthan_, '=': eqto_,
-              ',': disc_,  ';': swap_,  'I': rinp_ }
+              'i': input_, 'o': out_,   'c': outc_,  'd': dupl_,
+              '@': rott_,  'l': lthan_, 'L': gthan_, '=': eqto_,
+              ',': disc_,  ';': swap_,  'I': rinp_,  'O': outnl_,
+              'C': outcnl }
     dx, dy = 1, 0 # defaults to moving right
     x, y = 0, 0
     steps = 0
