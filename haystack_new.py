@@ -18,6 +18,8 @@ def bin_(s):   return s + [bin(s.pop())[2:]]
 def ubin_(s):  return s + [int(s.pop(), 2)]
 def min_(s):   return s + [min(s.pop())]
 def max_(s):   return s + [max(s.pop())]
+def enum_(s):  return s + [[(x,y)for x,y in enumerate(s.pop())]]
+def denum_(s): return s + [[x[1]for x in sorted(s.pop())]]
 
 def swap_(s):
     a = s.pop()
@@ -54,7 +56,8 @@ def interpret(prog, debug, vdebug):
               '@': rott_,   'l': lthan_, 'L': gthan_, '=': eqto_,
               ',': disc_,   ';': swap_,  'I': rinp_,  'O': outnl_,
               'C': outcnl_, 'a': addal_, 'A': addau_, 'b': bin_,
-              'B': ubin_,   'm': min_,   'M': max_ }
+              'B': ubin_,   'm': min_,   'M': max_,   'e': enum_,
+              'E': denum_ }
     dx, dy = 1, 0 # defaults to moving right
     x, y = 0, 0
     steps = 0
