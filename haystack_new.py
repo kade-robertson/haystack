@@ -47,7 +47,7 @@ def interpret(prog, debug, vdebug):
               'i': input_, 'o': out_,   'c': outc_,  'd': dupl_,
               '@': rott_,  'l': lthan_, 'L': gthan_, '=': eqto_,
               ',': disc_,  ';': swap_,  'I': rinp_,  'O': outnl_,
-              'C': outcnl }
+              'C': outcnl_ }
     dx, dy = 1, 0 # defaults to moving right
     x, y = 0, 0
     steps = 0
@@ -55,7 +55,8 @@ def interpret(prog, debug, vdebug):
         steps += 1
         char = prog[y][x]
         if vdebug:
-            print('Char: %s | Stack Before: %s'%(char, stack))
+            direc = [[['up','down'][dy == 1],'left'][dx == -1],'right'][dx == 1]
+            print('Char: %s | Posn: (%d, %d) going %s | Stack Before: %s'%(char, x, y, direc, stack))
         if char == '>':
             dx, dy = 1, 0
         elif char == '<':
@@ -97,6 +98,17 @@ def interpret(prog, debug, vdebug):
             x, y = x - dx, y - dy
             x = x % maxr
             y = y % maxc
+        elif char == '"':
+            sstr = ''
+            x, y = x + dx, y + dy
+            x = x % maxr
+            y = y % maxc
+            while prog[y][x] != '"':
+                sstr += prog[y][x]
+                x, y = x + dx, y + dy
+                x = x % maxr
+                y = y % maxc
+            stack.append(sstr)
         elif char in funcs:
             stack = funcs[char](stack)
         x, y = x + dx, y + dy
