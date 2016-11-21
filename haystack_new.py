@@ -10,6 +10,7 @@ def expand_map(m):
 
 def interpret(prog):
     maxr, maxc, prog = expand_map(prog)
+    stack = []
     dx, dy = 1, 0 # defaults to moving right
     x, y = 0, 0
     while prog[x][y] != '|':
@@ -32,6 +33,20 @@ def interpret(prog):
             elif dx == -1: dx, dy = 0, -1
             elif dy == 1: dx, dy = 1, 0
             elif dy == -1: dx, dy = -1, 0
+        elif char == '?':
+            if stack:
+                cond = stack.pop()
+                good, bad = (0, 0), (0, 0)
+                if dx == 1: good, bad = (1, 0), (0, 1)
+                elif dx == -1: good, bad = (-1, 0), (0, -1)
+                elif dy == 1: good, bad = (0, 1), (1, 0)
+                elif dy == -1: good, bad = (0, -1), (-1, 0)
+                if cond:
+                    dx, dy = good
+                else:
+                    dx, dy = bad
+                
+                    
         x, y = x + dx, y + dy
         x = x % maxr
         y = y % maxc
