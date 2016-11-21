@@ -1,17 +1,19 @@
 import os
 import argparse
 
-def plus_(s):  return s + [s.pop(-2) + s.pop()]
-def minus_(s): return s + [s.pop(-2) - s.pop()]
-def mult_(s):  return s + [s.pop(-2) * s.pop()]
-def divd_(s):  return s + [s.pop(-2) / s.pop()]
-def input_(s): return s + [eval(input())]
-def rinp_(s):  return s + [input()]
-def dupl_(s):  return s + [s[-1]]
-def rott_(s):  return [s.pop()] + s
-def gthan_(s): return s + [s.pop(-2) > s.pop()]
-def lthan_(s): return s + [s.pop(-2) < s.pop()]
-def eqto_(s):  return s + [s.pop(-2) == s.pop()]
+def plus_(s):   return s + [s.pop(-2) + s.pop()]
+def minus_(s):  return s + [s.pop(-2) - s.pop()]
+def mult_(s):   return s + [s.pop(-2) * s.pop()]
+def divd_(s):   return s + [s.pop(-2) / s.pop()]
+def input_(s):  return s + [eval(input())]
+def rinp_(s):   return s + [input()]
+def dupl_(s):   return s + [s[-1]]
+def rott_(s):   return [s.pop()] + s
+def gthan_(s):  return s + [s.pop(-2) > s.pop()]
+def lthan_(s):  return s + [s.pop(-2) < s.pop()]
+def eqto_(s):   return s + [s.pop(-2) == s.pop()]
+def addau_(s): return s + ['ABCDEFGHIJKLMNOPQRSTUVWXYZ']
+def addal_(s):  return s + ['abcdefghijklmnopqrstuvwxyz']
 
 def swap_(s):
     a = s.pop()
@@ -43,11 +45,11 @@ def expand_map(m):
 def interpret(prog, debug, vdebug):
     maxr, maxc, prog = expand_map(prog)
     stack = []
-    funcs = { '+': plus_,  '-': minus_, '*': mult_,  'D': divd_,
-              'i': input_, 'o': out_,   'c': outc_,  'd': dupl_,
-              '@': rott_,  'l': lthan_, 'L': gthan_, '=': eqto_,
-              ',': disc_,  ';': swap_,  'I': rinp_,  'O': outnl_,
-              'C': outcnl_ }
+    funcs = { '+': plus_,   '-': minus_, '*': mult_,  'D': divd_,
+              'i': input_,  'o': out_,   'c': outc_,  'd': dupl_,
+              '@': rott_,   'l': lthan_, 'L': gthan_, '=': eqto_,
+              ',': disc_,   ';': swap_,  'I': rinp_,  'O': outnl_,
+              'C': outcnl_, 'a': addal_, 'A': addau_ }
     dx, dy = 1, 0 # defaults to moving right
     x, y = 0, 0
     steps = 0
