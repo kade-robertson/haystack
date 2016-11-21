@@ -19,9 +19,19 @@ def interpret(prog):
         elif char == '<':
             dx, dy = -1, 0
         elif char == '^':
-            dx, dy = 0, 1
-        elif char == 'v':
             dx, dy = 0, -1
+        elif char == 'v':
+            dx, dy = 0, 1
+        elif char == '/':
+            if dx == 1: dx, dy = 0, -1
+            elif dx == -1: dx, dy = 0, 1
+            elif dy == 1: dx, dy = -1, 0
+            elif dy == -1: dx, dy = 1, 0
+        elif char == '\\':
+            if dx == 1: dx, dy = 0, 1
+            elif dx == -1: dx, dy = 0, -1
+            elif dy == 1: dx, dy = 1, 0
+            elif dy == -1: dx, dy = -1, 0
         x, y = x + dx, y + dy
         x = x % maxr
         y = y % maxc
