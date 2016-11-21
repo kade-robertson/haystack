@@ -23,6 +23,8 @@ def enum_(s):  return s + [[(x,y)for x,y in enumerate(s.pop())]]
 def denum_(s): return s + [[x[1]for x in sorted(s.pop())]]
 def zip_(s):   return s + [list(zip(s.pop(-2), s.pop()))]
 def zipl_(s):  return s + [list(itertools.zip_longest(s.pop(-2), s.pop()))]
+def rang_(s):  return s + [list(range(s.pop()))]
+def irang_(s): return s + [list(range(1, s.pop()+1))]
 
 def swap_(s):
     a = s.pop()
@@ -60,7 +62,8 @@ def interpret(prog, debug, vdebug):
               ',': disc_,   ';': swap_,  'I': rinp_,  'O': outnl_,
               'C': outcnl_, 'a': addal_, 'A': addau_, 'b': bin_,
               'B': ubin_,   'm': min_,   'M': max_,   'e': enum_,
-              'E': denum_,  'z': zip_,   'Z': zipl_ }
+              'E': denum_,  'z': zip_,   'Z': zipl_,  'r': rang_,
+              'R': irang_ }
     dx, dy = 1, 0 # defaults to moving right
     x, y = 0, 0
     steps = 0
