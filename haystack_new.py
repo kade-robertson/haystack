@@ -181,7 +181,7 @@ def interpret(prog, debug, vdebug, gib):
         if gib: coords_visited.add((y,x))
     if debug or vdebug:
         print('Steps made: %d'%steps)
-    return maxr, maxc, prog, coords_visited
+    return list(funcs.keys())+list('" 0123456789?<>^v\\/|'), maxr, maxc, prog, coords_visited
 
 def read_prog(path, debug, vdebug):
     prog = ''
@@ -189,20 +189,26 @@ def read_prog(path, debug, vdebug):
         prog = file.read()
     interpret(prog.split('\n'), debug, vdebug, False)
 
-def gibberish(path, n):
+def haystackify(path, n):
     prog = ''
     with open(path, 'r') as file:
         prog = file.read()
-    mr, mc, p, c = interpret(prog.split('\n'), False, False, True)
+    fk, mr, mc, p, c = interpret(prog.split('\n'), False, False, True)
     while n > 1:
         rs = interpret(prog.split('\n'), False, False, True)
-        c |= rs[3]
+        c |= rs[-1]
         n -= 1
+    fk = set(fk)
+    ch = list(set(chr(i)for i in range(33,127)).difference(fk))
+    for col in range(mc):
+        for row in range(mr):
+            if p[col][row] == ' ' and '"' not in p[col] and '"' not in list(zip(*p))[row]:
+                p[col][row] = ch[random.randint(0,len(ch)-1)]
     for col in range(mc):
         for row in range(mr):
             if (col,row) not in c:
                 p[col][row] = chr(random.randint(33,126))
-    print('Gibberish-ified:\n')
+    print('Haystack-ified:\n')
     print('\n'.join(''.join(x)for x in p))
     
 def main():
@@ -210,13 +216,13 @@ def main():
     parser.add_argument('-f', type=str, help='Open a Snake source file.')
     parser.add_argument('-d', action='store_true', help='Print debug information.')
     parser.add_argument('-D', action='store_true', help='Print detailed debug information.')
-    parser.add_argument('-G', type=int, help='Make your Haystack program Gibberish!')
+    parser.add_argument('-H', type=int, help='Make your Haystack program into a haystack!')
     args = parser.parse_args()
     if args.f != None:
         if args.f != '':
             if os.path.isfile(args.f):
-                if args.G != None and args.G > 0:
-                    gibberish(args.f, args.G)
+                if args.H != None and args.H > 0:
+                    haystackify(args.f, args.H)
                 else:
                     read_prog(args.f, args.d, args.D)
             else:
