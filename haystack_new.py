@@ -1,4 +1,5 @@
 import os
+import math
 import argparse
 import itertools
 
@@ -25,7 +26,15 @@ def zip_(s):   return s + [list(zip(s.pop(-2), s.pop()))]
 def zipl_(s):  return s + [list(itertools.zip_longest(s.pop(-2), s.pop()))]
 def rang_(s):  return s + [list(range(s.pop()))]
 def irang_(s): return s + [list(range(1, s.pop()+1))]
+def fact_(s):  return s + [math.factorial(s.pop())]
 
+def fib_(s):
+    n = s.pop()
+    a, b = 0, 1
+    while n:
+        a, b = b, a+b
+        n -= 1
+    return s + [a]
 def swap_(s):
     a = s.pop()
     b = s.pop()
@@ -63,7 +72,7 @@ def interpret(prog, debug, vdebug):
               'C': outcnl_, 'a': addal_, 'A': addau_, 'b': bin_,
               'B': ubin_,   'm': min_,   'M': max_,   'e': enum_,
               'E': denum_,  'z': zip_,   'Z': zipl_,  'r': rang_,
-              'R': irang_ }
+              'R': irang_,  'f': fact_,  'F': fib_ }
     dx, dy = 1, 0 # defaults to moving right
     x, y = 0, 0
     steps = 0
