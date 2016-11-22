@@ -1,5 +1,6 @@
 import os
 import math
+import random
 import argparse
 import itertools
 
@@ -89,9 +90,10 @@ def expand_map(m):
     for i in range(len(m)):
         while len(m[i]) < largest:
             m[i] += ' '
+        m[i] = list(m[i])
     return largest, len(m), m
 
-def interpret(prog, debug, vdebug):
+def interpret(prog, debug, vdebug, gib):
     maxr, maxc, prog = expand_map(prog)
     stack = []
     funcs = { '+': plus_,   '-': minus_, '*': mult_,  'D': divd_,
@@ -104,12 +106,14 @@ def interpret(prog, debug, vdebug):
               'R': irang_,  'f': fact_,  'F': fib_,   'u': uconf_,
               'U': uconb_,  '%': mod_,   '~': sqrt_,  'n': int_,
               'N': intt_ }
+    coords_visited = set()
     dx, dy = 1, 0 # defaults to moving right
     x, y = 0, 0
     steps = 0
     while prog[y][x] != '|':
         steps += 1
         char = prog[y][x]
+        if gib: coords_visited.add((y,x))
         if vdebug:
             direc = [[['up','down'][dy == 1],'left'][dx == -1],'right'][dx == 1]
             print('Char: %s | Posn: (%d, %d) going %s | Stack Before: %s'%(char, x, y, direc, stack))
@@ -150,45 +154,71 @@ def interpret(prog, debug, vdebug):
                 x, y = x + dx, y + dy
                 x = x % maxr
                 y = y % maxc
+                if gib: coords_visited.add((y,x))
             stack.append(int(numstr))
             x, y = x - dx, y - dy
             x = x % maxr
             y = y % maxc
+            if gib: coords_visited.add((y,x))
         elif char == '"':
             sstr = ''
             x, y = x + dx, y + dy
             x = x % maxr
             y = y % maxc
+            if gib: coords_visited.add((y,x))
             while prog[y][x] != '"':
                 sstr += prog[y][x]
                 x, y = x + dx, y + dy
                 x = x % maxr
                 y = y % maxc
+                if gib: coords_visited.add((y,x))
             stack.append(sstr)
         elif char in funcs:
             stack = funcs[char](stack)
         x, y = x + dx, y + dy
         x = x % maxr
         y = y % maxc
+        if gib: coords_visited.add((y,x))
     if debug or vdebug:
         print('Steps made: %d'%steps)
+    return maxr, maxc, prog, coords_visited
 
 def read_prog(path, debug, vdebug):
     prog = ''
     with open(path, 'r') as file:
         prog = file.read()
-    interpret(prog.split('\n'), debug, vdebug)
+    interpret(prog.split('\n'), debug, vdebug, False)
 
+def gibberish(path, n):
+    prog = ''
+    with open(path, 'r') as file:
+        prog = file.read()
+    mr, mc, p, c = interpret(prog.split('\n'), False, False, True)
+    while n > 1:
+        rs = interpret(prog.split('\n'), False, False, True)
+        c |= rs[3]
+        n -= 1
+    for col in range(mc):
+        for row in range(mr):
+            if (col,row) not in c:
+                p[col][row] = chr(random.randint(33,126))
+    print('Gibberish-ified:\n')
+    print('\n'.join(''.join(x)for x in p))
+    
 def main():
     parser = argparse.ArgumentParser(description = 'Interpreter for the Haystack programming language.')
     parser.add_argument('-f', type=str, help='Open a Snake source file.')
     parser.add_argument('-d', action='store_true', help='Print debug information.')
     parser.add_argument('-D', action='store_true', help='Print detailed debug information.')
+    parser.add_argument('-G', type=int, help='Make your Haystack program Gibberish!')
     args = parser.parse_args()
     if args.f != None:
         if args.f != '':
             if os.path.isfile(args.f):
-                read_prog(args.f, args.d, args.D)
+                if args.G != None and args.G > 0:
+                    gibberish(args.f, args.G)
+                else:
+                    read_prog(args.f, args.d, args.D)
             else:
                 print('-f: Error - File path given does not exist.')
         else:
