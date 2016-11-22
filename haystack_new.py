@@ -24,10 +24,33 @@ def enum_(s):  return s + [[(x,y)for x,y in enumerate(s.pop())]]
 def denum_(s): return s + [[x[1]for x in sorted(s.pop())]]
 def zip_(s):   return s + [list(zip(s.pop(-2), s.pop()))]
 def zipl_(s):  return s + [list(itertools.zip_longest(s.pop(-2), s.pop()))]
-def rang_(s):  return s + [list(range(s.pop()))]
-def irang_(s): return s + [list(range(1, s.pop()+1))]
 def fact_(s):  return s + [math.factorial(s.pop())]
+def sqrt_(s):  return s + [math.sqrt(s.pop())]
+def int_(s):   return s + [round(s.pop())]
+def intt_(s):  return s + [int(s.pop())]
 
+def rang_(s):
+    n = s.pop()
+    l = []
+    i = 0
+    while n:
+        l += [i]
+        i += 1
+        n -= 1
+    return s + [l]
+def irang_(s):
+    n = s.pop() + 1
+    l = []
+    i = 1
+    while n:
+        l += [i]
+        i += 1
+        n -= 1
+    return s + [l]
+def mod_(s):
+    d = s.pop()
+    n = s.pop()
+    return s + [n % d]
 def uconf_(s):
     l = s.pop()
     return s + [l[1:],l[0]]
@@ -79,7 +102,8 @@ def interpret(prog, debug, vdebug):
               'B': ubin_,   'm': min_,   'M': max_,   'e': enum_,
               'E': denum_,  'z': zip_,   'Z': zipl_,  'r': rang_,
               'R': irang_,  'f': fact_,  'F': fib_,   'u': uconf_,
-              'U': uconb_ }
+              'U': uconb_,  '%': mod_,   '~': sqrt_,  'n': int_,
+              'N': intt_ }
     dx, dy = 1, 0 # defaults to moving right
     x, y = 0, 0
     steps = 0
